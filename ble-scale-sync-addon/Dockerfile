@@ -14,4 +14,9 @@ COPY run.sh /app/run.sh
 COPY addon-config.mjs /app/addon-config.mjs
 RUN chmod +x /app/run.sh
 
+# Fork only: Healthkeep S11 support on top of the pinned application image,
+# until it is part of an upstream release (the script is a no-op then).
+COPY patches/robi-s9-a7.mjs /tmp/robi-s9-a7.mjs
+RUN node /tmp/robi-s9-a7.mjs /app/dist/scales/robi-s9.js && rm /tmp/robi-s9-a7.mjs
+
 ENTRYPOINT ["tini", "--", "/app/run.sh"]
